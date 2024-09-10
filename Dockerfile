@@ -1,5 +1,5 @@
 # build stage
-FROM ghcr.io/cargo-lambda/cargo-lambda:latest AS build-stage
+FROM m.daocloud.io/ghcr.io/cargo-lambda/cargo-lambda:latest AS build-stage
 WORKDIR /usr/src/kafka-producer
 COPY Cargo.toml Cargo.lock ./
 COPY src ./src
