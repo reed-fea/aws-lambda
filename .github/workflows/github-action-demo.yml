@@ -6,26 +6,14 @@ on:
       - main
 
 jobs:
-  package:
-    # The type of runner that the job will run on
+  cargo-lambda-build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-        name: Checkout Source Code
-
-      - name: Building and packaging AWS Lambda functions
-        uses: miere/rust-aws-lambda@1.51.0
-        id: rust-aws-lambda
-        # Only required if your source is not in the root folder
-        # By default, source-dir points to '.'
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: goto-bus-stop/setup-zig@v2
         with:
-          source-dir: "source"
-
-      # Do something with the generated zip files
-      # They will be generated at the target folder of your project.
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: "{{process.env.GITHUB_RUN_ID}}"
-          path: "source/target/lambda/*.zip"
+          version: 0.13.0
+      - uses: zerj9/setup-cargo-lambda@v0.1.1
+      - run: cargo lambda build --arm64
+        working-directory: lambda_function
